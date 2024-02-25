@@ -35,6 +35,28 @@
 
 - **run_ping_all.sh**: 类似于 `run_iperf3_all.sh`，但用于运行 ping 测试。
 
-- **iperf3_test.sh**: 对指定的主机执行 iperf3 测试，记录测试结果，并计算平均吞吐量。
+- **iperf3_test.sh**: 该脚本执行 iperf3 测试以测量带宽。默认情况下，它运行 3 次测试，最多并行连接数为 40。iperf3 默认使用的端口是 80。脚本将结果记录到 `./logs/iperf3` 目录下的文件中。
 
-- **ping_test.sh**: 对指定的主机执行 ping 测试，记录测试结果，并计算平均响应时间。
+- **ping_test.sh**: 该脚本执行 ping 测试以测量延迟。它为以下每个 ping 计数运行 3 次测试：10、50 和 100。脚本将结果记录到 `./logs/ping` 目录下的文件中。
+
+### 安装和使用
+
+#### iperf3 安装
+
+要在系统上安装 iperf3，您可以使用操作系统的包管理器：
+
+- 对于 Debian/Ubuntu (apt)：
+  ```bash
+  sudo apt-get update
+  sudo apt-get install iperf3
+  ```
+
+- 对于 CentOS/RedHat (yum)：
+  ```bash
+  sudo yum install iperf3
+  ```
+
+### 重要注意事项
+
+- 确保防火墙上必要的端口（iperf3 默认为 80）已打开，以允许测试成功运行。
+- 脚本假设 `hosts.txt` 文件与脚本位于同一目录，并包含要测试的主机列表。
