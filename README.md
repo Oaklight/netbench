@@ -1,62 +1,51 @@
 # 网络性能测试脚本
-[English version](./README_en.md)
+[English](./README_en.md)
 
-本仓库包含一组用于执行网络性能测试的 shell 脚本，使用 iperf3 和 ping 工具来测量本地机器与指定远程主机之间的带宽和延迟。
+这个仓库包含了一些用于测试网络性能的 shell 脚本。它们使用 `iperf3` 和 `ping` 来测试带宽和延迟。
 
-### 内容
+## 脚本列表
 
-- `run_iperf3_all.sh`: 一个脚本，用于在 hosts 文件中列出的所有主机上运行 iperf3 测试。
-- `run_ping_all.sh`: 一个脚本，用于在 hosts 文件中列出的所有主机上运行 ping 测试。
-- `iperf3_test.sh`: 一个脚本，用于对单个主机执行 iperf3 测试并记录结果。
-- `ping_test.sh`: 一个脚本，用于对单个主机执行 ping 测试并记录结果。
-- `hosts`: 包含要测试的主机列表的文件。
-- `./logs`: 用于记录测试结果的目录。
+- `run_iperf3_all.sh`: 在 `hosts` 文件中的所有主机上运行 `iperf3`。
+- `run_ping_all.sh`: 在 `hosts` 文件中的所有主机上运行 `ping`。
+- `iperf3_test.sh`: 对单个主机进行带宽测试。
+- `ping_test.sh`: 对单个主机进行延迟测试。
+- `hosts`: 测试目标主机列表。
+- `./logs`: 存放测试日志的目录。
 
-### 使用方法
+## 使用方法
 
-在运行脚本之前，请确保您的系统上安装了 Bash shell。脚本假设 `iperf3` 和 `ping` 工具也已安装并可在系统的 PATH 中访问。
+确保你的系统支持 Bash 并且安装了 `iperf3` 和 `ping`。
 
-1. 将脚本放置在一个目录中，并创建一个 `hosts` 文件，格式如下：
-
+1. 把脚本放到一个目录下，创建一个 `hosts` 文件，格式如下：
    ```
    1.1.1.1 example.machine
    ```
-
-2. 使用 Bash 解释器运行脚本：
-
-   ```bash
+2. 运行脚本：
+   ```
    bash run_iperf3_all.sh
    bash run_ping_all.sh
    ```
 
-### 脚本详情
+## 脚本细节
 
-- **run_iperf3_all.sh**: 该脚本逐行读取 hosts 文件，跳过注释和空行，并为每个主机名调用 `iperf3_test.sh` 脚本。
+- `run_iperf3_all.sh` 和 `run_ping_all.sh`: 读取 `hosts` 文件，忽略注释和空行，对每个主机运行相应的测试脚本。
+- `iperf3_test.sh`: 运行带宽测试，默认测试 3 次，最大并行连接数 40，使用端口 80，结果记录在 `./logs/iperf3`。
+- `ping_test.sh`: 运行延迟测试，分别对 10、50 和 100 个 ping 计数进行 3 次测试，结果记录在 `./logs/ping`。
 
-- **run_ping_all.sh**: 类似于 `run_iperf3_all.sh`，但用于运行 ping 测试。
+## 安装 `iperf3`
 
-- **iperf3_test.sh**: 该脚本执行 iperf3 测试以测量带宽。默认情况下，它运行 3 次测试，最多并行连接数为 40。iperf3 默认使用的端口是 80。脚本将结果记录到 `./logs/iperf3` 目录下的文件中。
+使用包管理器安装 `iperf3`：
 
-- **ping_test.sh**: 该脚本执行 ping 测试以测量延迟。它为以下每个 ping 计数运行 3 次测试：10、50 和 100。脚本将结果记录到 `./logs/ping` 目录下的文件中。
-
-### 安装和使用
-
-#### iperf3 安装
-
-要在系统上安装 iperf3，您可以使用操作系统的包管理器：
-
-- 对于 Debian/Ubuntu (apt)：
-  ```bash
-  sudo apt-get update
-  sudo apt-get install iperf3
+- Debian/Ubuntu:
   ```
-
-- 对于 CentOS/RedHat (yum)：
-  ```bash
+  sudo apt-get update && sudo apt-get install iperf3
+  ```
+- CentOS/RedHat:
+  ```
   sudo yum install iperf3
   ```
 
-### 重要注意事项
+## 注意事项
 
-- 确保防火墙上必要的端口（iperf3 默认为 80）已打开，以允许测试成功运行。
-- 脚本假设 `hosts.txt` 文件与脚本位于同一目录，并包含要测试的主机列表。
+- 确保防火墙允许 `iperf3` 使用的端口（默认 80）。
+- `hosts.txt` 文件应与脚本同目录，包含要测试的主机列表。
